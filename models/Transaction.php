@@ -1,3 +1,3 @@
 <?php
-
+    // Modèle transaction
 ?>
