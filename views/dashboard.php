@@ -1,3 +1,3 @@
 <?php
-
+    // dashboard view
 ?>
