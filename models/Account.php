@@ -1,3 +1,0 @@
-<?php
-    // Modèle compte bancaire
-?>
