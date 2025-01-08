@@ -1,7 +1,10 @@
 <?php
+
 namespace Helpers;
+
 use PDO;
 use PDOException;
+
 class Database
 {
     private $host;
@@ -22,7 +25,7 @@ class Database
     public function __construct(
         $username = 'root',
         $password = '',
-        $dbname = 'Bank',
+        $dbname = 'bank',
         $host = 'localhost'
     ) {
         $this->username = $username;

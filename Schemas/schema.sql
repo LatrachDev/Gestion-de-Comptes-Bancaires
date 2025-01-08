@@ -35,3 +35,7 @@ CREATE TABLE transactions(
 
 ALTER TABLE users
     ADD COLUMN role ENUM('admin', 'client') NOT NULL DEFAULT 'client';
+
+
+USE bank;
+INSERT INTO users (name, email, password, role) VALUES ('Admin', 'mkaroumi123@gmail.com', '123123', 'admin');

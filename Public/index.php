@@ -1,6 +1,7 @@
 <?php
 require_once '../Helpers/pathUtils.php';
 require_once '../autoload.php';
+session_start();
 
 use Core\Router;
 use Core\Route;
