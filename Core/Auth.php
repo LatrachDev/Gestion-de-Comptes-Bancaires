@@ -3,7 +3,7 @@
 namespace Core;
 
 use App\Models\User;
-
+use Helpers\Database;
 class Auth
 {
     private static $user = null;
@@ -13,6 +13,7 @@ class Auth
         $_SESSION['user_id'] = $user->getId();
         $_SESSION['user_role'] = $user->getRole();
         self::$user = $user;
+        die;
     }
 
     public static function logout()

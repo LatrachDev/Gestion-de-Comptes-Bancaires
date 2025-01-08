@@ -31,3 +31,7 @@ CREATE TABLE transactions(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
 );
+
+
+ALTER TABLE users
+    ADD COLUMN role ENUM('admin', 'client') NOT NULL DEFAULT 'client';

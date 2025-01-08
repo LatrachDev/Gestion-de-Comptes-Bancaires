@@ -14,6 +14,13 @@
         <!-- <div class="w-full max-w-md bg-white/30 backdrop-blur-md p-8 rounded-lg shadow-lg border border-white/20"> -->
         <div class="w-full max-w-md bg-white/30 backdrop-blur-md p-8 rounded-lg shadow-white border border-white/20">
             <h2 class="text-3xl font-extrabold text-center text-white mb-6">Bank Login</h2>
+            <?php 
+                if ($this->hasFlash("loginError")) {
+                    echo $this->getFlash("loginError")['message'];
+                }
+                var_dump($auth);
+                echo $_SESSION['user_id'];
+            ?>
             <form action="#" method="POST">
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-200">Email</label>

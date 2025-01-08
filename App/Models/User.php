@@ -99,7 +99,8 @@ class User
 
     public function verifyPassword($password)
     {
-        return password_verify($password, $this->password);
+        // return password_verify($password, $this->password);
+        return $this->password == $password;
     }
 
     public function getRole()
