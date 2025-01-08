@@ -50,7 +50,7 @@
             </form>
             <p class="mt-6 text-center text-sm text-gray-300">
                 Don’t have an account? 
-                <a href="" class="text-blue-400 hover:underline">Sign up</a>
+                <a href="#" class="text-blue-400 hover:underline">Sign up</a>
             </p>
         </div>
     </main>
