@@ -16,7 +16,7 @@ if (!$db->connect()) {
     die('Could not connect to the database');
 }
 if (User::count($db) === 0) {
-    $admin = User::create($db, 'admin', 'mkaroumi123@gmail.com', '123123', 'admin.jpg');
+    $admin = User::create($db, 'admin', 'mkaroumi123@gmail.com', '123123', 'admin.jpg', 'admin');
 }
 
 $router = new Router();
@@ -32,8 +32,8 @@ Route::get('/admin', [Admin::class, 'index']);
 
 Route::get('/admin/clients', [Admin::class, 'listClients']);
 Route::get('/admin/clients/search', [Admin::class, 'searchClients']);
-Route::get('/admin/clients/create', [Admin::class, 'showCreateClient']); 
-Route::post('/admin/clients/create', [Admin::class, 'createClient']); 
+Route::get('/admin/clients/create', [Admin::class, 'showCreateClient']);
+Route::post('/admin/clients/create', [Admin::class, 'createClient']);
 Route::get('/admin/clients/{id}', [Admin::class, 'getClient']);
 Route::post('/admin/clients/{id}/update', [Admin::class, 'updateClient']);
 Route::post('/admin/clients/{id}/remove', [Admin::class, 'removeClient']);
