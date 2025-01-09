@@ -11,9 +11,13 @@
 <body>
     <main class="bg-[url('/assets/images/bg2.jpg')] w-full h-screen bg-cover bg-center flex justify-center items-center bg-gray-900/60 backdrop-blur-lg">
 
-        <!-- <div class="w-full max-w-md bg-white/30 backdrop-blur-md p-8 rounded-lg shadow-lg border border-white/20"> -->
         <div class="w-full max-w-md bg-white/30 backdrop-blur-md p-8 rounded-lg shadow-white border border-white/20">
             <h2 class="text-3xl font-extrabold text-center text-white mb-6">Bank Login</h2>
+            <?php
+            if ($this->hasFlash("loginError")) {
+                echo $this->getFlash("loginError")['message'];
+            }
+            ?>
             <form action="#" method="POST">
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-200">Email</label>

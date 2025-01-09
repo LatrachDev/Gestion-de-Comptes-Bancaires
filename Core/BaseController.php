@@ -49,4 +49,9 @@ class BaseController
         }
         return null;
     }
+
+    public function hasFlash($flashName): bool
+    {
+        return isset($_SESSION[$flashName]);
+    }
 }
