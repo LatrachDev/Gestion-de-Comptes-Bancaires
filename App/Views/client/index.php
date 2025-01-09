@@ -10,44 +10,13 @@
 <body class="bg-gray-100">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-white shadow-lg hidden md:block" id="sidebar">
-            <div class="p-6">
-                <h1 class="text-2xl font-bold text-blue-600">My Bank</h1>
-            </div>
-            <nav class="mt-6">
-                <a href="index.php" class="flex items-center w-full p-4 space-x-3 bg-blue-50 text-blue-600 border-r-4 border-blue-600">
-                    <i data-lucide="wallet"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="compte.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="credit-card"></i>
-                    <span>My Accounts</span>
-                </a>
-                <a href="transfer.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="send"></i>
-                    <span>Transfers</span>
-                </a>
-                <a href="beneficiary.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="users"></i>
-                    <span>Beneficiaries</span>
-                </a>
-                <a href="history.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="history"></i>
-                    <span>History</span>
-                </a>
-                <a href="profile.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="user"></i>
-                    <span>Profile</span>
-                </a>
-            </nav>
-        </div>
+        <?php require_once __DIR__ . '/parts/clientSidebar.php'; ?>
 
         <!-- Toggle Button for Mobile -->
         <button class="md:hidden p-4 text-gray-600 hover:text-blue-600" id="toggleSidebar">
             <i data-lucide="menu" class="w-6 h-6"></i>
         </button>
 
-        <!-- Add this button for desktop view -->
         <button class="hidden md:block p-4 text-gray-600 hover:text-blue-600" id="toggleSidebarDesktop">
             <i data-lucide="menu" class="w-6 h-6"></i>
         </button>
