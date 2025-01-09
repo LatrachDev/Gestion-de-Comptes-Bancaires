@@ -29,15 +29,16 @@ class Account
         return $data ? true : false;
     }
 
-    public function create($userId, $accountType, $balance = 0.00)
+    public static function create(Database $db, $userId, $accountType, $balance = 0.00)
     {
         if (!in_array($accountType, ['savings', 'current'])) {
             return false;
         }
         $sql = "INSERT INTO accounts (user_id, account_type, balance) VALUES (?, ?, ?)";
-        if ($this->db->query($sql, [$userId, $accountType, $balance])) {
-            $this->id = $this->db->lastInsertId();
-            return $this->loadById($this->id);
+        if ($db->query($sql, [$userId, $accountType, $balance])) {
+            $account = new self($db);
+            $account->loadById($db->lastInsertId());
+            return $account;
         }
         return false;
     }
@@ -83,13 +84,11 @@ class Account
             return false;
         }
 
-        // Perform transfer
         if ($this->updateBalance($this->balance - $amount)) {
             if ($targetAccount->updateBalance($targetAccount->getBalance() + $amount)) {
                 $this->transactionModel->create($this->id, 'transfer', $amount);
                 return $this;
             }
-            // Rollback if target update fails
             $this->updateBalance($this->balance + $amount);
         }
         return false;
@@ -124,7 +123,6 @@ class Account
         return $this;
     }
 
-    // Getters
     public function getId()
     {
         return $this->id;
@@ -150,14 +148,14 @@ class Account
         return $this->updatedAt;
     }
 
-    public function loadByUserId($userId)
+    public static function loadByUserId(Database $db, $userId)
     {
         $sql = "SELECT * FROM accounts WHERE user_id = ?";
-        $results = $this->db->fetchAll($sql, [$userId]);
+        $results = $db->fetchAll($sql, [$userId]);
 
         $accounts = [];
         foreach ($results as $data) {
-            $account = new Account($this->db);
+            $account = new Account($db);
             $account->hydrate($data);
             $accounts[] = $account;
         }
