@@ -31,3 +31,13 @@ CREATE TABLE transactions(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
 );
+
+
+ALTER TABLE users
+    ADD COLUMN role ENUM('admin', 'client') NOT NULL DEFAULT 'client';
+
+
+USE bank;
+INSERT INTO users (name, email, password, role) VALUES ('Admin', 'mkaroumi123@gmail.com', '123123', 'admin');
+
+ALTER TABLE accounts MODIFY COLUMN account_type ENUM('current', 'savings') NOT NULL;
