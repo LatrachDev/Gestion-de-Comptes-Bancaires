@@ -21,8 +21,19 @@ class Account
         $this->transactionModel = new Transaction($db);
     }
 
+
+    public function hasAccountOfType($userId, $accountType)
+    {
+        $sql = "SELECT * FROM accounts WHERE user_id = ? AND account_type = ?";
+        $data = $this->db->fetch($sql, [$userId, $accountType]);
+        return $data ? true : false;
+    }
+
     public function create($userId, $accountType, $balance = 0.00)
     {
+        if (!in_array($accountType, ['savings', 'current'])) {
+            return false;
+        }
         $sql = "INSERT INTO accounts (user_id, account_type, balance) VALUES (?, ?, ?)";
         if ($this->db->query($sql, [$userId, $accountType, $balance])) {
             $this->id = $this->db->lastInsertId();
@@ -45,7 +56,7 @@ class Account
     public function deposit($amount)
     {
         if ($amount <= 0) return false;
-        
+
         if ($this->updateBalance($this->balance + $amount)) {
             $this->transactionModel->create($this->id, 'deposit', $amount);
             return $this;
@@ -56,7 +67,7 @@ class Account
     public function withdraw($amount)
     {
         if ($amount <= 0 || $amount > $this->balance) return false;
-        
+
         if ($this->updateBalance($this->balance - $amount)) {
             $this->transactionModel->create($this->id, 'withdrawal', $amount);
             return $this;
@@ -67,7 +78,7 @@ class Account
     public function transfer($amount, $toAccountId)
     {
         $targetAccount = $this->loadById($toAccountId);
-        
+
         if (!$targetAccount || !$this->validateTransfer($amount, $targetAccount)) {
             return false;
         }
@@ -86,10 +97,10 @@ class Account
 
     private function validateTransfer($amount, $targetAccount)
     {
-        return $amount > 0 && 
-               $amount <= $this->balance && 
-               $targetAccount && 
-               $targetAccount->getUserId() === $this->userId;
+        return $amount > 0 &&
+            $amount <= $this->balance &&
+            $targetAccount &&
+            $targetAccount->getUserId() === $this->userId;
     }
 
     private function updateBalance($newBalance)
@@ -143,7 +154,7 @@ class Account
     {
         $sql = "SELECT * FROM accounts WHERE user_id = ?";
         $results = $this->db->fetchAll($sql, [$userId]);
-        
+
         $accounts = [];
         foreach ($results as $data) {
             $account = new Account($this->db);

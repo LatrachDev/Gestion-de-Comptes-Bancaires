@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use Core\BaseController;
-use App\Models\User;
 use Core\Auth;
+use App\Models\User;
 use Helpers\Database;
 
 class AuthController extends BaseController
@@ -13,7 +13,7 @@ class AuthController extends BaseController
 
     public function __construct()
     {
-        // parent::__construct();
+        parent::__construct();
         $this->db = new Database();
         $this->db->connect();
     }
@@ -21,7 +21,7 @@ class AuthController extends BaseController
     public function login()
     {
         if (Auth::check()) {
-            header('Location: /index');
+            header('Location: ' . (Auth::isAdmin() ? '/admin' : '/dashboard'));
             exit;
         }
         $this->render('auth/login');
@@ -33,15 +33,14 @@ class AuthController extends BaseController
         $password = $_POST['password'] ?? '';
 
         $user = User::loadByEmail($this->db, $email);
-
+        
         if ($user && $user->verifyPassword($password)) {
-            Auth::login($user);
-            header('Location: ' . ($user->getRole() === 'admin' ? '/admin' : '/'));
-            exit;
-        } else {
-            $this->setFlash('loginError', 'wrong email or password', 'error');
-            $this->login();
+            Auth::login($user); 
         }
+
+        $this->setFlash('loginError', 'Invalid credentials', 'error');
+        header('Location: /login');
+        exit;
     }
 
     public function logout()
