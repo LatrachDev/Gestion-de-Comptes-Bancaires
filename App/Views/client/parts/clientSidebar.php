@@ -27,5 +27,11 @@
             <i data-lucide="user"></i>
             <span>Profile</span>
         </a>
+
+        <a href="/logout" class="flex items-center p-4 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+            <i class="fas fa-sign-out-alt w-5 h-5 text-gray-500"></i>
+            <span class="ml-3 text-sm font-medium">Logout</span>
+        </a>
     </nav>
+        
 </div>

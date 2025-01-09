@@ -6,6 +6,7 @@
     <title>My Bank - Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
     <div class="flex min-h-screen">
@@ -23,7 +24,7 @@
 
         <!-- Main Content -->
         <div class="flex-1 p-4 md:p-8">
-            <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
+            <h2 class="text-2xl font-bold text-gray-800">Hello </h2>
             
             <!-- Account Summary Cards -->
             <?php foreach($account as $acc) : ?>
