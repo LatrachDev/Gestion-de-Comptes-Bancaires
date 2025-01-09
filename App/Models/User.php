@@ -57,13 +57,13 @@ class User
         return $data['total'];
     }
 
-    public static function create($db, $name, $email, $password, $profilePic = null)
+    public static function create($db, $name, $email, $password, $profilePic = null, $role = 'client')
     {
         $user = new self($db);
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO users (name, email, password, profile_pic) VALUES (?, ?, ?, ?)";
-        $result = $db->query($sql, [$name, $email, $hashedPassword, $profilePic]);
+        $sql = "INSERT INTO users (name, email, password, profile_pic, role) VALUES (?, ?, ?, ?, ?)";
+        $result = $db->query($sql, [$name, $email, $hashedPassword, $profilePic, $role]);
 
         if ($result) {
             $user->id = $db->lastInsertId();
@@ -71,6 +71,7 @@ class User
             $user->email = $email;
             $user->password = $hashedPassword;
             $user->profilePic = $profilePic;
+            $user->role = $role;
             return $user;
         }
         return null;
