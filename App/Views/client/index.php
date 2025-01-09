@@ -19,23 +19,23 @@
                     <i data-lucide="wallet"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="compte.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="compte.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="credit-card"></i>
                     <span>My Accounts</span>
                 </a>
-                <a href="transfer.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="transfer.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="send"></i>
                     <span>Transfers</span>
                 </a>
-                <a href="beneficiary.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="beneficiary.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="users"></i>
                     <span>Beneficiaries</span>
                 </a>
-                <a href="history.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="history.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="history"></i>
                     <span>History</span>
                 </a>
-                <a href="profile.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="profile.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="user"></i>
                     <span>Profile</span>
                 </a>
