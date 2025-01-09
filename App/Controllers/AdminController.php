@@ -47,24 +47,37 @@ class AdminController extends BaseController
         $user = User::create($this->db, $name, $email, $password);
 
         if ($user) {
-            $accountsCreated = true;
 
             if (isset($_POST['create_current'])) {
                 $currentDeposit = floatval($_POST['current_deposit'] ?? 0);
-                $accountsCreated = $accountsCreated && $this->account->create(
+                $accountsCreated = Account::create(
+                    $this->db,
                     $user->getId(),
                     'current',
                     $currentDeposit
                 );
+
+                if (!$accountsCreated) {
+                    $this->setFlash('admin_create_client', 'Failed to create current account', 'error');
+                    header('Location: /admin/clients/create');
+                    exit;
+                }
             }
 
             if (isset($_POST['create_savings'])) {
                 $savingsDeposit = floatval($_POST['savings_deposit'] ?? 0);
-                $accountsCreated = $accountsCreated && $this->account->create(
+                $accountsCreated = Account::create(
+                    $this->db,
                     $user->getId(),
                     'savings',
                     $savingsDeposit
                 );
+
+                if (!$accountsCreated) {
+                    $this->setFlash('admin_create_client', 'Failed to create savings account', 'error');
+                    header('Location: /admin/clients/create');
+                    exit;
+                }
             }
 
             if ($accountsCreated) {
@@ -94,7 +107,7 @@ class AdminController extends BaseController
             exit;
         }
 
-        $accounts = $this->account->loadByUserId($client->getId());
+        $accounts = Account::loadByUserId($this->db, $client->getId());
         $this->render('admin/clients/show', [
             'client' => $client,
             'accounts' => $accounts
