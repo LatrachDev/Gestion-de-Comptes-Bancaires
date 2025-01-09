@@ -11,7 +11,6 @@ use Helpers\Database;
 class AdminController extends BaseController
 {
     private $db;
-    private $account;
 
     public function __construct()
     {
@@ -19,7 +18,6 @@ class AdminController extends BaseController
         Auth::requireAdmin();
         $this->db = new Database();
         $this->db->connect();
-        $this->account = new Account($this->db);
     }
 
     public function index(): void

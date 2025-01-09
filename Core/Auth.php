@@ -65,4 +65,12 @@ class Auth
             exit;
         }
     }
+    public static function requireClient()
+    {
+        self::require();
+        if (self::isAdmin()) {
+            header('Location: /admin');
+            exit;
+        }
+    }
 }
