@@ -9,38 +9,8 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex min-h-screen">
-        <!-- Sidebar (identique aux autres pages) -->
-        <div class="w-64 bg-white shadow-lg">
-            <div class="p-6">
-                <h1 class="text-2xl font-bold text-blue-600">Ma Banque</h1>
-            </div>
-            <nav class="mt-6">
-                <a href="index.html" class="flex items-center w-full p-4 space-x-3 bg-blue-50 text-blue-600 border-r-4 border-blue-600">
-                    <i data-lucide="wallet"></i>
-                    <span>Tableau de bord</span>
-                </a>
-                <a href="mcompte.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="credit-card"></i>
-                    <span>Mes comptes</span>
-                </a>
-                <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="send"></i>
-                    <span>Virements</span>
-                </a>
-                <a href="benificier.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="users"></i>
-                    <span>Bénéficiaires</span>
-                </a>
-                <a href="historique.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="history"></i>
-                    <span>Historique</span>
-                </a>
-                <a href="profeil.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
-                    <i data-lucide="user"></i>
-                    <span>Profil</span>
-                </a>
-            </nav>
-        </div>
+        <!-- Sidebar -->
+        <?php require_once __DIR__ . '/parts/clientSidebar.php'; ?>
 
         <!-- Main Content -->
         <div class="flex-1 p-8">

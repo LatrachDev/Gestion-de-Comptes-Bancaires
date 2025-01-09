@@ -26,19 +26,27 @@
             <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
             
             <!-- Account Summary Cards -->
+            <?php foreach($account as $acc) : ?>
+               
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+            <?php if($acc->getAccountType() == "current") : ?>
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Current Account</h3>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">$0.00</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2"> <?= $acc->getBalance(); ?> $</p>
                     <p class="text-sm text-gray-500 mt-1">N° *** ***** **</p>
                 </div>
-                
+                <?php elseif($acc->getAccountType() == "savings") : ?>
+            
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Savings Account</h3>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">$0.00</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2"> <?= $acc->getBalance(); ?> $</p>
                     <p class="text-sm text-gray-500 mt-1">N° *** ***** **</p>
                 </div>
+                <?php endif; ?>
             </div>
+            <?php endforeach; ?>
+            
+
 
             <!-- Quick Actions -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
