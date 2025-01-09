@@ -39,3 +39,5 @@ ALTER TABLE users
 
 USE bank;
 INSERT INTO users (name, email, password, role) VALUES ('Admin', 'mkaroumi123@gmail.com', '123123', 'admin');
+
+ALTER TABLE accounts MODIFY COLUMN account_type ENUM('current', 'savings') NOT NULL;

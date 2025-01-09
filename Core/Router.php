@@ -1,6 +1,7 @@
 <?php
 
 namespace Core;
+
 class Router
 {
     private array $routes = [];
@@ -28,7 +29,9 @@ class Router
                 return call_user_func_array($action, $matches);
             }
         }
-        http_response_code(404);
-        echo 'Page not found';
+
+        header("HTTP/1.0 404 Not Found");
+        echo "404 - Page not found";
+        exit;
     }
 }

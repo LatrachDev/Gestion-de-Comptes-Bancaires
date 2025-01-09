@@ -18,7 +18,7 @@
                 echo $this->getFlash("loginError")['message'];
             }
             ?>
-            <form action="#" method="POST">
+            <form action="/login" method="POST">
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-200">Email</label>
                     <input
