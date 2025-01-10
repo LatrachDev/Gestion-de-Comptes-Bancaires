@@ -34,13 +34,35 @@ class AuthController extends BaseController
 
         $user = User::loadByEmail($this->db, $email);
         
-        if ($user && $user->verifyPassword($password)) {
-            Auth::login($user); 
+        if ($user){
+            $success = false;
+
+            if ($user->verifyPassword($password)) {
+                $success = true;
+            } else {
+                $this->setFlash('loginError', 'Invalid credentials', 'error');
+                header('Location: /login');
+                exit;
+            }
+            if ($user->isActive()){
+                $success = true;
+            } else {
+                $this->setFlash('loginError', 'Your account is blocked', 'error');
+                header('Location: /login');
+                exit;
+            }
+            if ($success) {
+                Auth::login($user); 
+            }
+        } else{
+            $this->setFlash('loginError', 'User not found', 'error');
+            header('Location: /login');
+            exit;
         }
 
-        $this->setFlash('loginError', 'Invalid credentials', 'error');
-        header('Location: /login');
-        exit;
+        
+
+        
     }
 
     public function logout()
