@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Helpers\Database;
+use LDAP\Result;
 
 class User
 {
@@ -11,18 +12,19 @@ class User
     private $email;
     private $password;
     private $profilePic;
+    private $role;
+    private $status;
     private $createdAt;
     private $updatedAt;
-    private $role = 'client';
     private $db;
 
-    public function __construct($db)
+    public function __construct(Database $db)
     {
         $this->db = $db;
     }
 
     // load all clients
-    public static function loadAllClients($db)
+    public static function loadAllClients(Database $db)
     {
         $sql = "SELECT * FROM users WHERE role = 'client'";
         $data = $db->fetchAll($sql);
@@ -36,7 +38,7 @@ class User
         return $users;
     }
 
-    public static function loadAll($db)
+    public static function loadAll(Database $db)
     {
         $sql = "SELECT * FROM users";
         $data = $db->fetchAll($sql);
@@ -50,21 +52,20 @@ class User
         return $users;
     }
 
-    public static function count($db)
+    public static function count(Database $db)
     {
         $sql = "SELECT COUNT(*) as total FROM users";
         $data = $db->fetch($sql);
         return $data['total'];
     }
 
-    public static function create($db, $name, $email, $password, $profilePic = null, $role = 'client')
+    public static function create(Database $db, $name, $email, $password, $profilePic = null, $role = 'client')
     {
         $user = new self($db);
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO users (name, email, password, profile_pic, role) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO users (name, email, password, profile_pic, role, status) VALUES (?, ?, ?, ?, ?, 'active')";
         $result = $db->query($sql, [$name, $email, $hashedPassword, $profilePic, $role]);
-
         if ($result) {
             $user->id = $db->lastInsertId();
             $user->name = $name;
@@ -72,12 +73,13 @@ class User
             $user->password = $hashedPassword;
             $user->profilePic = $profilePic;
             $user->role = $role;
+            $user->status = 'active';
             return $user;
         }
-        return null;
+        return false;
     }
 
-    public static function loadById($db, $id)
+    public static function loadById(Database $db, $id)
     {
         $sql = "SELECT * FROM users WHERE id = ?";
         $data = $db->fetch($sql, [$id]);
@@ -90,11 +92,10 @@ class User
         return null;
     }
 
-    public static function loadByEmail($db, $email)
+    public static function loadByEmail(Database $db, $email)
     {
         $sql = "SELECT * FROM users WHERE email = ?";
         $data = $db->fetch($sql, [$email]);
-
         if ($data) {
             $user = new self($db);
             $user->hydrate($data);
@@ -103,7 +104,7 @@ class User
         return null;
     }
 
-    public static function loadByName($db, $name)
+    public static function loadByName(Database $db, $name)
     {
         $sql = "SELECT * FROM users WHERE name = ?";
         $data = $db->fetch($sql, [$name]);
@@ -150,6 +151,36 @@ class User
         $this->role = $role;
     }
 
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function isActive()
+    {
+        return $this->status === 'active';
+    }
+
+    public function suspend()
+    {
+        $sql = "UPDATE users SET status = 'suspended' WHERE id = ?";
+        if ($this->db->query($sql, [$this->id])) {
+            $this->status = 'suspended';
+            return true;
+        }
+        return false;
+    }
+
+    public function activate()
+    {
+        $sql = "UPDATE users SET status = 'active' WHERE id = ?";
+        if ($this->db->query($sql, [$this->id])) {
+            $this->status = 'active';
+            return true;
+        }
+        return false;
+    }
+
     private function hydrate($data)
     {
         $this->id = $data['id'];
@@ -158,8 +189,10 @@ class User
         $this->password = $data['password'];
         $this->profilePic = $data['profile_pic'];
         $this->role = $data['role'];
+        $this->status = $data['status'];
         $this->createdAt = $data['created_at'];
         $this->updatedAt = $data['updated_at'];
+        return $this;
     }
 
     public function getId()

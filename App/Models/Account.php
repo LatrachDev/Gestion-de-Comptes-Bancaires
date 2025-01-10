@@ -10,6 +10,7 @@ class Account
     private $userId;
     private $accountType;
     private $balance;
+    private $status;
     private $createdAt;
     private $updatedAt;
     private $db;
@@ -34,7 +35,7 @@ class Account
         if (!in_array($accountType, ['savings', 'current'])) {
             return false;
         }
-        $sql = "INSERT INTO accounts (user_id, account_type, balance) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO accounts (user_id, account_type, balance, status) VALUES (?, ?, ?, 'active')";
         if ($db->query($sql, [$userId, $accountType, $balance])) {
             $account = new self($db);
             $account->loadById($db->lastInsertId());
@@ -114,10 +115,11 @@ class Account
 
     private function hydrate($data)
     {
-        $this->id = (int)$data['id'];
-        $this->userId = (int)$data['user_id'];
+        $this->id = $data['id'];
+        $this->userId = $data['user_id'];
         $this->accountType = $data['account_type'];
-        $this->balance = (float)$data['balance'];
+        $this->balance = $data['balance'];
+        $this->status = $data['status'];
         $this->createdAt = $data['created_at'];
         $this->updatedAt = $data['updated_at'];
         return $this;
@@ -146,6 +148,36 @@ class Account
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function suspend()
+    {
+        $sql = "UPDATE accounts SET status = 'suspended' WHERE id = ?";
+        if ($this->db->query($sql, [$this->id])) {
+            $this->status = 'suspended';
+            return true;
+        }
+        return false;
+    }
+
+    public function activate()
+    {
+        $sql = "UPDATE accounts SET status = 'active' WHERE id = ?";
+        if ($this->db->query($sql, [$this->id])) {
+            $this->status = 'active';
+            return true;
+        }
+        return false;
+    }
+
+    public function isActive()
+    {
+        return $this->status === 'active';
     }
 
     public static function loadByUserId(Database $db, $userId)

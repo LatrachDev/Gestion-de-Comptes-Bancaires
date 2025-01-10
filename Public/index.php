@@ -40,9 +40,10 @@ Route::post('/admin/clients/{id}/remove', [Admin::class, 'removeClient']);
 
 Route::post('/admin/clients/{id}/accounts/create', [Admin::class, 'createBankAccount']);
 Route::get('/admin/clients/{id}/accounts', [Admin::class, 'listClientAccounts']);
-Route::post('/admin/clients/{id}/accounts/{accountId}/disable', [Admin::class, 'disableBankAccount']);
-Route::post('/admin/clients/{id}/accounts/{accountId}/enable', [Admin::class, 'enableBankAccount']);
-Route::post('/admin/clients/{id}/accounts/{accountId}/remove', [Admin::class, 'removeBankAccount']);
+Route::post('/admin/clients/{id}/accounts/{accountId}/suspend', [Admin::class, 'suspendAccount']);
+Route::post('/admin/clients/{id}/accounts/{accountId}/activate', [Admin::class, 'activateAccount']);
+Route::post('/admin/clients/{id}/suspend', [Admin::class, 'suspendClient']);
+Route::post('/admin/clients/{id}/activate', [Admin::class, 'activateClient']);
 
 Route::get('/admin/reports', [Admin::class, 'getFinancialReport']);
 
