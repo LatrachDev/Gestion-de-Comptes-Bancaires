@@ -22,6 +22,13 @@ class ClientController extends BaseController {
     {
 
         $user = Auth::user();
+
+        // if ($user) {
+        //     var_dump($user->getName());
+        // } else {
+        //     echo "No user authenticated!";
+        // }
+
         $accounts = Account::loadByUserId($this->db, $user->getId());
         $this->render('client/index', ['account' => $accounts]);
     }
@@ -31,8 +38,15 @@ class ClientController extends BaseController {
     }
 
     public function profile(){
-        $this->render('client/profile');
+
+        $user = Auth::user();
+        if (!$user) {
+            die('No user authenticated!');
+        }
+
+        $this->render('client/profile', ['user'=> Auth::user()]);
     }
+    
 
     public function history(){
         $this->render('client/history');
@@ -44,6 +58,25 @@ class ClientController extends BaseController {
     public function benefit(){
         $this->render('client/benefit');
     }
+
+    public function updateProfile()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = $_POST['name'] ?? null;
+            $email = $_POST['email'] ?? null;
+
+            $user = Auth::user();
+            if ($user) {
+                $user->setName($name);
+                $user->setEmail($email);
+                $user->save(); 
+            }
+
+            header('Location: /profile');
+            exit;
+        }
+    }
+    
 }
 
 
