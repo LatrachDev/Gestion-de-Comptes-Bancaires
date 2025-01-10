@@ -199,4 +199,16 @@ class User
     {
         $this->profilePic = $profilePic;
     }
+
+    public function save()
+    {
+        $query = "UPDATE users SET name = :name, email = :email WHERE id = :id";
+        $params = [
+            'name' => $this->name,
+            'email' => $this->email,
+            'id' => $this->id
+        ];
+
+        return $this->db->query($query, $params);
+    }
 }

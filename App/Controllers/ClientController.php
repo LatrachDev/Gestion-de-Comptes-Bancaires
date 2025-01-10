@@ -38,7 +38,7 @@ class ClientController extends BaseController {
     }
 
     public function profile(){
-        
+
         $user = Auth::user();
         if (!$user) {
             die('No user authenticated!');
@@ -59,88 +59,23 @@ class ClientController extends BaseController {
         $this->render('client/benefit');
     }
 
-    // public function updateProfile(): void
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         $user = Auth::user();
+    public function updateProfile()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = $_POST['name'] ?? null;
+            $email = $_POST['email'] ?? null;
 
-    //         // Retrieve form data
-    //         $name = trim($_POST['name']);
-    //         $email = trim($_POST['email']);
-    //         $currentPassword = $_POST['current_password'] ?? '';
-    //         $newPassword = $_POST['new_password'] ?? '';
-    //         $confirmPassword = $_POST['confirm_password'] ?? '';
+            $user = Auth::user();
+            if ($user) {
+                $user->setName($name);
+                $user->setEmail($email);
+                $user->save(); 
+            }
 
-    //         // Basic validation
-    //         if (empty($name) || empty($email)) {
-    //             $_SESSION['error'] = 'Name and email cannot be empty.';
-    //             header('Location: /profile');
-    //             exit;
-    //         }
-
-    //         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    //             $_SESSION['error'] = 'Invalid email format.';
-    //             header('Location: /profile');
-    //             exit;
-    //         }
-
-    //         // Password update logic
-    //         $hashedPassword = $user->getPassword(); // Default to current password
-
-    //         if (!empty($currentPassword) || !empty($newPassword) || !empty($confirmPassword)) {
-    //             if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
-    //                 $_SESSION['error'] = 'All password fields are required.';
-    //                 header('Location: /profile');
-    //                 exit;
-    //             }
-
-    //             if (!password_verify($currentPassword, $hashedPassword)) {
-    //                 $_SESSION['error'] = 'Current password is incorrect.';
-    //                 header('Location: /profile');
-    //                 exit;
-    //             }
-
-    //             if ($newPassword !== $confirmPassword) {
-    //                 $_SESSION['error'] = 'New passwords do not match.';
-    //                 header('Location: /profile');
-    //                 exit;
-    //             }
-
-    //             $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-    //         }
-
-    //         // Update database
-    //         try {
-    //             $this->db->query(
-    //                 "UPDATE users SET name = :name, email = :email, password = :password WHERE id = :id",
-    //                 [
-    //                     ':name' => $name,
-    //                     ':email' => $email,
-    //                     ':password' => $hashedPassword,
-    //                     ':id' => $user->getId(),
-    //                 ]
-    //             );
-
-    //             // Update user object in session
-    //             $user->setName($name);
-    //             $user->setEmail($email);
-    //             $_SESSION['user'] = $user;
-
-    //             $_SESSION['success'] = 'Profile updated successfully.';
-    //             header('Location: /profile');
-    //             exit;
-    //         } catch (\Exception $e) {
-    //             $_SESSION['error'] = 'Failed to update profile. Please try again later.';
-    //             header('Location: /profile');
-    //             exit;
-    //         }
-    //     }
-
-    //     header('Location: /profile');
-    //     exit;
-    // }
-
-    
+            header('Location: /profile');
+            exit;
+        }
+    }
     
 }
 

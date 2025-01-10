@@ -12,9 +12,9 @@
         <!-- Sidebar -->
         <?php
 
-use Core\Auth;
+        use Core\Auth;
 
- require_once __DIR__ . '/parts/clientSidebar.php'; ?>
+        require_once __DIR__ . '/parts/clientSidebar.php'; ?>
 
         <!-- Toggle Button for Mobile -->
         <button class="md:hidden p-4 text-gray-600 hover:text-blue-600" id="toggleSidebar">
