@@ -1,6 +1,6 @@
-CREATE DATABASE Bank;
+CREATE DATABASE bank;
 
-USE Bank;
+USE bank;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -8,6 +8,7 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     profile_pic VARCHAR(255),
+    status ENUM('active', 'suspended') NOT NULL DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -17,6 +18,7 @@ CREATE TABLE accounts(
     user_id INT NOT NULL,
     account_type ENUM('current', 'savings') NOT NULL,
     balance DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    status ENUM('active', 'suspended') NOT NULL DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -32,12 +34,7 @@ CREATE TABLE transactions(
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
 );
 
-
 ALTER TABLE users
     ADD COLUMN role ENUM('admin', 'client') NOT NULL DEFAULT 'client';
-
-
-USE bank;
-INSERT INTO users (name, email, password, role) VALUES ('Admin', 'mkaroumi123@gmail.com', '123123', 'admin');
 
 ALTER TABLE accounts MODIFY COLUMN account_type ENUM('current', 'savings') NOT NULL;
