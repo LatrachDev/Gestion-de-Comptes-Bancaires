@@ -54,9 +54,11 @@ Route::get('/transfer', [Client::class,'transfer']);
 Route::get('/profile', [Client::class,'profile']);
 Route::get('/history', [client::class,'history']);
 Route::get('/compte', [client::class,'compte']);
-Route::get('/benefit', [client::class,'benefit']);
 
 Route::post('/update-profile', [Client::class,'updateProfile']);
+
+Route::post('/fund-account', [Client::class, 'fundAccount']);
+Route::post('/withdraw', [Client::class, 'withdraw']);
 
 
 Route::dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

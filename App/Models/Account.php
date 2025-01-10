@@ -68,7 +68,7 @@ class Account
 
     public function withdraw($amount)
     {
-        if ($amount <= 0 || $amount > $this->balance) return false;
+        if ($amount <= 0 || $amount > $this->balance) return 10;
 
         if ($this->updateBalance($this->balance - $amount)) {
             $this->transactionModel->create($this->id, 'withdrawal', $amount);
@@ -198,4 +198,10 @@ class Account
     {
         return $this->transactionModel->getHistory($this->id);
     }
+
+    public function setBalance(float $balance): void
+    {
+        $this->balance = $balance;
+    }
+
 }
