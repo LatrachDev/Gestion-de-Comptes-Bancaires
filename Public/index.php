@@ -55,4 +55,7 @@ Route::get('/history', [client::class,'history']);
 Route::get('/compte', [client::class,'compte']);
 Route::get('/benefit', [client::class,'benefit']);
 
+Route::post('/update-profile', [Client::class,'updateProfile']);
+
+
 Route::dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

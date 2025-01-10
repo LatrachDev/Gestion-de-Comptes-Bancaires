@@ -14,7 +14,7 @@
         <?php require_once __DIR__ . '/parts/clientSidebar.php'; ?>
 
         <!-- Main Content -->
-        <div class="flex-1 p-8">
+        <form method="POST" action="/update-profile" class="flex-1 p-8">
             <h2 class="text-2xl font-bold text-gray-800">My Profile</h2>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
@@ -30,7 +30,7 @@
                                     <input 
                                         type="text" 
                                         class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-                                        value=""
+                                        value="<?= htmlspecialchars($user->getName()) ?>" 
                                     />
                                 </div>
 
@@ -40,7 +40,7 @@
                                     <input 
                                         type="email" 
                                         class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-                                        value=""
+                                        value="<?= htmlspecialchars($user->getEmail()) ?>" 
                                     />
                                 </div>
 
@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 
 </body>

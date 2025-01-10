@@ -10,7 +10,11 @@
 <body class="bg-gray-100">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <?php require_once __DIR__ . '/parts/clientSidebar.php'; ?>
+        <?php
+
+use Core\Auth;
+
+ require_once __DIR__ . '/parts/clientSidebar.php'; ?>
 
         <!-- Toggle Button for Mobile -->
         <button class="md:hidden p-4 text-gray-600 hover:text-blue-600" id="toggleSidebar">
@@ -23,27 +27,27 @@
 
         <!-- Main Content -->
         <div class="flex-1 p-4 md:p-8">
-            <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
+            <h2 class="text-2xl font-bold text-gray-800">
+                Hello <?= isset($auth['user']) ? $auth['user']->getName() : 'Guest' ?>
+            </h2>
             
             <!-- Account Summary Cards -->
             <?php foreach($account as $acc) : ?>
                
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-            <?php if($acc->getAccountType() == "current") : ?>
+                <?php if($acc->getAccountType() == "current") : ?>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Current Account</h3>
                     <p class="text-3xl font-bold text-gray-900 mt-2"> <?= $acc->getBalance(); ?> $</p>
-                    <p class="text-sm text-gray-500 mt-1">N° *** ***** **</p>
                 </div>
                 <?php elseif($acc->getAccountType() == "savings") : ?>
             
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Savings Account</h3>
                     <p class="text-3xl font-bold text-gray-900 mt-2"> <?= $acc->getBalance(); ?> $</p>
-                    <p class="text-sm text-gray-500 mt-1">N° *** ***** **</p>
                 </div>
-                <?php endif; ?>
             </div>
+            <?php endif; ?>
             <?php endforeach; ?>
             
 
