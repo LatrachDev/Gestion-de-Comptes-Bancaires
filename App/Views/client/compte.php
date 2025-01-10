@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Banque - Mes Comptes</title>
+    <title>My Bank - My Accounts</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,7 +15,7 @@
 
         <!-- Main Content -->
         <div class="flex-1 p-8">
-            <h2 class="text-2xl font-bold text-gray-800">Mes Comptes</h2>
+            <h2 class="text-2xl font-bold text-gray-800">My accounts</h2>
 
             <!-- Compte Courant -->
             <div class="mt-6 bg-white rounded-lg shadow">
