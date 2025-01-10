@@ -19,10 +19,6 @@
             <i class="fas fa-exchange-alt w-5 h-5"></i>
             <span>Transfers</span>
         </a>
-        <a href="benefit" class="flex items-center w-full p-4 space-x-3 <?= $currentRoute === '/benefit' ? 'bg-blue-50 text-blue-600 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50' ?>">
-            <i class="fas fa-users w-5 h-5"></i>
-            <span>Beneficiaries</span>
-        </a>
         <a href="history" class="flex items-center w-full p-4 space-x-3 <?= $currentRoute === '/history' ? 'bg-blue-50 text-blue-600 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50' ?>">
             <i class="fas fa-history w-5 h-5"></i>
             <span>History</span>
