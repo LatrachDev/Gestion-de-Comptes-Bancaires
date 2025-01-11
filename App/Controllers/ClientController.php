@@ -51,7 +51,7 @@ class ClientController extends BaseController
                     echo "false";
                 }
                 $recipient = $_POST['recipient'];
-   
+
                 $amount = $_POST['amount'];
                 $motif = $_POST['motif'];
                 if($account->transfer($amount, $_POST['recipient'])){
@@ -64,7 +64,7 @@ class ClientController extends BaseController
                     exit;
                 }
 
-            
+
         }
     }
 
@@ -149,7 +149,7 @@ class ClientController extends BaseController
             header('Location: /compte');
             exit;
         }
-        
+
         if ($account->getAccountType() == 'savings') {
             $this->setFlash('compte', 'cant  withdraw fom savings', 'error');
             header('Location: /compte');
@@ -171,7 +171,7 @@ class ClientController extends BaseController
         }
 
         if ($success === 10) {
-            $this->setFlash('compte', 'sir ta tjm3 lflos w aji', 'error'); 
+            $this->setFlash('compte', 'sir ta tjm3 lflos w aji', 'error');
             header('Location: /compte');
             exit;
         }
@@ -191,7 +191,7 @@ class ClientController extends BaseController
         }
 
         $accounts = Account::loadByUserId($this->db, $user->getId());
-        
+
         $transactions = [];
         foreach ($accounts as $account) {
             $transaction = new Transaction($this->db);

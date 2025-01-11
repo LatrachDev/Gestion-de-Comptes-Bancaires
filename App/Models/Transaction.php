@@ -19,12 +19,13 @@ class Transaction
         $this->db = $db;
     }
 
-    public function create($accountId, $type, $amount, $beneficiaryAccountId = null)
+    public static function create(Database $db,$accountId, $type, $amount, $beneficiaryAccountId = null)
     {
         $sql = "INSERT INTO transactions (account_id, transaction_type, amount, beneficiary_account_id) VALUES (?, ?, ?, ?)";
-        if ($this->db->query($sql, [$accountId, $type, $amount, $beneficiaryAccountId])) {
-            $this->id = $this->db->lastInsertId();
-            return $this->loadById($this->id);
+        if ($db->query($sql, [$accountId, $type, $amount, $beneficiaryAccountId])) {
+            $id = $db->lastInsertId();
+            $transaction = new Transaction($db);
+            return $transaction->loadById($id);
         }
         return false;
     }
@@ -67,7 +68,7 @@ class Transaction
     public function getHistory($accountId)
     {
         return $this->db->fetchAll(
-            "SELECT t.*, 
+            "SELECT t.*,
                     a1.account_type as source_account_type,
                     a2.account_type as beneficiary_account_type,
                     u1.name as source_name,

@@ -60,7 +60,12 @@ class Account
         if ($amount <= 0) return false;
 
         if ($this->updateBalance($this->balance + $amount)) {
-            $this->transactionModel->create($this->id, 'deposit', $amount);
+            if (!Transaction::create($this->db, $this->id, 'deposit', $amount)) {
+                $this->updateBalance($this->balance - $amount);
+                echo "Transaction failed";
+                die();
+                return false;
+            }
             return $this;
         }
         return false;
