@@ -49,14 +49,14 @@
                         <label class="block text-sm font-medium text-gray-700">Montant</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-500 sm:text-sm">$</span>
+                                <span class="text-gray-500 sm:text-sm">MAD</span>
                             </div>
                             <input 
                                 type="number" 
                                 min="0.01" 
                                 step="0.01"
-                                class="pl-7 block w-full rounded-md border border-gray-300 p-2" 
-                                placeholder="0.00"
+                                class="pl-7 block w-full rounded-md border border-gray-300 p-2 " 
+                                placeholder="    0.00"
                                 name="amount"
                             />
                         </div>

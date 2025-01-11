@@ -51,7 +51,7 @@
                                     <?= ucfirst($acc->getAccountType()) ?> Account
                                 </h3>
                                 <p class="text-3xl font-bold text-gray-900 mt-2">
-                                    <?= $acc->getBalance(); ?> $
+                                    <?= $acc->getBalance(); ?> MAD
                                 </p>
                             </div>
                         </div>

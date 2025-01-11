@@ -29,7 +29,7 @@
                                     </h3>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-2xl font-bold text-gray-900">$<?= number_format($acc->getBalance(), 2) ?></p>
+                                    <p class="text-2xl font-bold text-gray-900"><?= number_format($acc->getBalance(), 2) ?><span class="text-sm font-medium">MAD</span></p>
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
                                             <?= $acc->getStatus() === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
                                         <?= $acc->getStatus() ?>
