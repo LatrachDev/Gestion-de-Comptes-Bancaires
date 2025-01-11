@@ -16,22 +16,32 @@
         <!-- Main Content -->
         <div class="flex-1 p-8">
             <h2 class="text-2xl font-bold text-gray-800">Make a transfer</h2>
-            
+            <?php
+            if ($this->hasFlash("transfer")) {
+                echo $this->getFlash("transfer")['message'];
+            }
+            ?>
             <div class="bg-white p-6 rounded-lg shadow mt-6">
-                <form class="space-y-4">
+                <form class="space-y-4" method="POST" action="/transfer">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Compte à débiter</label>
-                        <select class="mt-1 block w-full rounded-md border border-gray-300 p-2">
-                            <option>Compte Courant - FR76 1234 5678 9012</option>
-                            <option>Compte Épargne - FR76 9876 5432 1098</option>
+                        <select class="mt-1 block w-full rounded-md border border-gray-300 p-2" name="sender">
+                            <?php foreach ($accounts as $account) : ?>
+                                <?php if ($account->getAccountType() === 'current') : ?>
+                                    <option value="<?= $account->getId() ?>">Current - <?= $account->getId() ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Beneficiary</label>
-                        <select class="mt-1 block w-full rounded-md border border-gray-300 p-2">
-                            <option>Beneficiary1 - *** **** ****  ****</option>
-                            <option>Beneficiary2 - *** **** ****  ****</option>
+                        <select class="mt-1 block w-full rounded-md border border-gray-300 p-2" name="recipient">
+                        <?php foreach ($accounts as $account) : ?>
+                                <?php if ($account->getAccountType() === 'savings') : ?>
+                                    <option value="<?= $account->getId() ?>">Saving - <?= $account->getId() ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
@@ -47,6 +57,7 @@
                                 step="0.01"
                                 class="pl-7 block w-full rounded-md border border-gray-300 p-2" 
                                 placeholder="0.00"
+                                name="amount"
                             />
                         </div>
                     </div>
@@ -57,6 +68,7 @@
                             type="text"
                             class="mt-1 block w-full rounded-md border border-gray-300 p-2" 
                             placeholder="Motif du virement"
+                            name="motif"
                         />
                     </div>
 

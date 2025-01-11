@@ -60,104 +60,18 @@
             </div>
 
             <!-- Quick Actions -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-                <button class="flex items-center justify-center space-x-2 p-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300" onclick="openPopup('newTransferPopup')">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+                <a href="/transfer" class="flex items-center justify-center space-x-2 p-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300" onclick="openPopup('newTransferPopup')">
                     <i data-lucide="send" class="w-6 h-6"></i>
                     <span class="text-lg">New Transfer</span>
-                </button>
-                <button class="flex items-center justify-center space-x-2 p-6 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300" onclick="openPopup('fundAccountPopup')">
+                </a>
+                <a href="/compte" class="flex items-center justify-center space-x-2 p-6 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300" onclick="openPopup('fundAccountPopup')">
                     <i data-lucide="plus-circle" class="w-6 h-6"></i>
                     <span class="text-lg">Fund Account</span>
-                </button>
-                <button class="flex items-center justify-center space-x-2 p-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300" onclick="openPopup('manageBeneficiariesPopup')">
-                    <i data-lucide="users" class="w-6 h-6"></i>
-                    <span class="text-lg">Manage Beneficiaries</span>
-                </button>
+                </a>
             </div>
 
-            <!-- Popup Sections -->
-            <div id="newTransferPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/3">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">New Transfer</h3>
-                        <button class="text-gray-600 hover:text-gray-800" onclick="closePopup('newTransferPopup')">
-                            <i data-lucide="x" class="w-6 h-6"></i>
-                        </button>
-                    </div>
-                    <form class="space-y-4">
-                        <div>
-                            <label for="transferName" class="block text-sm font-medium text-gray-700">Recipient Name</label>
-                            <input type="text" id="transferName" class="w-full p-2 border rounded-lg" placeholder="Enter recipient name">
-                        </div>
-                        <div>
-                            <label for="transferAccount" class="block text-sm font-medium text-gray-700">Account Number</label>
-                            <input type="text" id="transferAccount" class="w-full p-2 border rounded-lg" placeholder="Enter account number">
-                        </div>
-                        <div>
-                            <label for="transferAmount" class="block text-sm font-medium text-gray-700">Amount</label>
-                            <input type="number" id="transferAmount" class="w-full p-2 border rounded-lg" placeholder="Enter amount">
-                        </div>
-                        <div>
-                            <label for="transferMotif" class="block text-sm font-medium text-gray-700">Transfer Motif</label>
-                            <textarea id="transferMotif" class="w-full p-2 border rounded-lg" placeholder="Enter the reason for the transfer"></textarea>
-                        </div>
-                        <div class="flex justify-end space-x-2">
-                            <button type="button" class="bg-gray-600 text-white p-2 rounded" onclick="closePopup('newTransferPopup')">Cancel</button>
-                            <button type="submit" class="bg-blue-600 text-white p-2 rounded">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div id="fundAccountPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/3">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Fund Account</h3>
-                        <button class="text-gray-600 hover:text-gray-800" onclick="closePopup('fundAccountPopup')">
-                            <i data-lucide="x" class="w-6 h-6"></i>
-                        </button>
-                    </div>
-                    <form class="space-y-4">
-                        <div>
-                            <label for="fundAmount" class="block text-sm font-medium text-gray-700">Amount</label>
-                            <input type="number" id="fundAmount" class="w-full p-2 border rounded-lg" placeholder="Enter amount">
-                        </div>
-                        <div>
-                            <label for="fundSource" class="block text-sm font-medium text-gray-700">Source</label>
-                            <input type="text" id="fundSource" class="w-full p-2 border rounded-lg" placeholder="Enter funding source">
-                        </div>
-                        <div class="flex justify-end space-x-2">
-                            <button type="button" class="bg-gray-600 text-white p-2 rounded" onclick="closePopup('fundAccountPopup')">Cancel</button>
-                            <button type="submit" class="bg-green-600 text-white p-2 rounded">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div id="manageBeneficiariesPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/3">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Manage Beneficiaries</h3>
-                        <button class="text-gray-600 hover:text-gray-800" onclick="closePopup('manageBeneficiariesPopup')">
-                            <i data-lucide="x" class="w-6 h-6"></i>
-                        </button>
-                    </div>
-                    <form class="space-y-4">
-                        <div>
-                            <label for="beneficiaryName" class="block text-sm font-medium text-gray-700">Beneficiary Name</label>
-                            <input type="text" id="beneficiaryName" class="w-full p-2 border rounded-lg" placeholder="Enter beneficiary name">
-                        </div>
-                        <div>
-                            <label for="beneficiaryAccount" class="block text-sm font-medium text-gray-700">Account Number</label>
-                            <input type="text" id="beneficiaryAccount" class="w-full p-2 border rounded-lg" placeholder="Enter account number">
-                        </div>
-                        <div class="flex justify-end space-x-2">
-                            <button type="button" class="bg-gray-600 text-white p-2 rounded" onclick="closePopup('manageBeneficiariesPopup')">Cancel</button>
-                            <button type="submit" class="bg-purple-600 text-white p-2 rounded">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            
         </div>
     </div>
 
@@ -177,13 +91,6 @@
             });
         });
 
-        function openPopup(popupId) {
-            document.getElementById(popupId).classList.remove('hidden');
-        }
-
-        function closePopup(popupId) {
-            document.getElementById(popupId).classList.add('hidden');
-        }
     </script>
 </body>
 </html>
