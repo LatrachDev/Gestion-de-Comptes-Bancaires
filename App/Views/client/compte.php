@@ -45,39 +45,15 @@
                                 </button>
 
                                 <!-- Withdrawal Button -->
+                                 <?php if($acc->getAccountType() === 'current') : ?>
                                 <button onclick="toggleModal('withdrawalModal', <?= $acc->getId() ?>)" class="flex items-center justify-center p-3 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50">
                                     <i data-lucide="download" class="w-5 h-5 mr-2"></i>
                                     Withdrawal
                                 </button>
+                                <?php endif; ?>
                             </div>
 
-                            <div class="mt-6">
-                                <h4 class="font-medium text-gray-700">Account details</h4>
-                                <dl class="mt-4 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                                    <div>
-                                        <dt class="text-sm text-gray-500">Opening Date</dt>
-                                        <dd class="mt-1 text-sm text-gray-900"></dd>
-                                    </div>
-                                    <?php if ($acc->getAccountType() === 'current') : ?>
-                                        <div>
-                                            <dt class="text-sm text-gray-500">Withdrawal Limit</dt>
-                                        </div>
-                                        <div>
-                                            <dt class="text-sm text-gray-500">Authorized Overdraft</dt>
-                                        </div>
-                                    <?php else : ?>
-                                        <div>
-                                            <dt class="text-sm text-gray-500">Interest Rate</dt>
-                                        </div>
-                                        <div>
-                                            <dt class="text-sm text-gray-500">Plafond</dt>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div>
-                                        <dt class="text-sm text-gray-500">Maintenance Fee</dt>
-                                    </div>
-                                </dl>
-                            </div>
+                            
                         </div>
                     <?php endforeach; ?>
                 <?php else : ?>

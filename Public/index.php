@@ -51,6 +51,7 @@ Route::get('/admin/reports', [Admin::class, 'getFinancialReport']);
 // Client Routes
 
 Route::get('/transfer', [Client::class,'transfer']);
+Route::post('/transfer', [Client::class,'transfer']);
 Route::get('/profile', [Client::class,'profile']);
 Route::get('/history', [client::class,'history']);
 Route::get('/compte', [client::class,'compte']);

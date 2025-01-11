@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Account;
+use App\Models\Transaction;
 use Core\Auth;
 use Core\BaseController;
 use Helpers\Database;
@@ -35,7 +36,36 @@ class ClientController extends BaseController
 
     public function transfer()
     {
-        $this->render('client/transfer');
+        if($_SERVER['REQUEST_METHOD'] === 'GET'){
+            $user = Auth::user();
+
+            if (!$user) {
+                die('No user authenticated!');
+            }
+
+            $accounts = Account::loadByUserId($this->db, $user->getId());
+            $this->render('client/transfer', ['accounts' => $accounts]);
+        } elseif($_SERVER['REQUEST_METHOD'] === 'POST'){
+                $account = new Account($this->db);
+                if (!$account->loadById($_POST['sender'])) {
+                    echo "false";
+                }
+                $recipient = $_POST['recipient'];
+   
+                $amount = $_POST['amount'];
+                $motif = $_POST['motif'];
+                if($account->transfer($amount, $_POST['recipient'])){
+                    $this->setFlash('transfer', 'Transfer Completed');
+                    header('Location: /transfer');
+                    exit;
+                }else{
+                    $this->setFlash('transfer', 'Transfer not Completed', 'error');
+                    header('Location: /transfer');
+                    exit;
+                }
+
+            
+        }
     }
 
     public function profile()
@@ -52,7 +82,7 @@ class ClientController extends BaseController
 
     public function history()
     {
-        $this->render('client/history');
+        $this->getMe();
     }
 
     public function compte()
@@ -150,9 +180,29 @@ class ClientController extends BaseController
         exit;
     }
 
-    // transfrer
-    // sending account is account_id
-    // receiving account is receiving_id
-    // if sending is savings and receiving->userId != Auth::user()->getId print error
-    // else do the transfar
+
+
+    private function getMe(){
+        $user = Auth::user();
+        if (!$user) {
+            $this->setFlash('admin_show_client', 'Client not found', 'error');
+            header('Location: /admin/clients');
+            exit;
+        }
+
+        $accounts = Account::loadByUserId($this->db, $user->getId());
+        
+        $transactions = [];
+        foreach ($accounts as $account) {
+            $transaction = new Transaction($this->db);
+            $transactions[$account->getId()] = $transaction->getHistory($account->getId());
+        }
+
+        return $this->render('client/history', [
+            'client' => $user,
+            'accounts' => $accounts,
+            'transactions' => $transactions
+        ]);
+    }
+
 }

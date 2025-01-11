@@ -79,14 +79,16 @@ class Account
 
     public function transfer($amount, $toAccountId)
     {
-        $targetAccount = $this->loadById($toAccountId);
-
-        if (!$targetAccount || !$this->validateTransfer($amount, $targetAccount)) {
+        $targetAccount = Account::loadAccountById($this->db, $toAccountId);
+        // var_dump(Account::validateTransferById($amount, $targetAccount['user_id'], $this->balance, $this->userId));
+        // var_dump($targetAccount['balance']);
+        // die();
+        if (!$targetAccount || !Account::validateTransferById($amount, $targetAccount['user_id'], $this->balance, $this->userId)) {
             return false;
         }
 
         if ($this->updateBalance($this->balance - $amount)) {
-            if ($targetAccount->updateBalance($targetAccount->getBalance() + $amount)) {
+            if (Account::updateBalanceById($targetAccount['id'], ($targetAccount['balance'] + $amount), $this->db)) {
                 $this->transactionModel->create($this->id, 'transfer', $amount);
                 return $this;
             }
@@ -202,6 +204,27 @@ class Account
     public function setBalance(float $balance): void
     {
         $this->balance = $balance;
+    }
+
+    public static function loadAccountById(Database $db, $id){
+        $sql = "SELECT * FROM accounts WHERE id = ?";
+        $data = $db->fetch($sql, [$id]);
+        return $data;
+    }
+    public static function validateTransferById($amount, $id, $balance, $userId)
+    {
+        return $amount > 0 &&
+            $amount <= $balance &&
+            $id === $userId;
+    }
+
+    public static function updateBalanceById($id, $balance, $db)
+    {
+        $sql = "UPDATE accounts SET balance = ? WHERE id = ?";
+        if ($db->query($sql, [$balance, $id])) {
+            return true;
+        }
+        return false;
     }
 
 }
