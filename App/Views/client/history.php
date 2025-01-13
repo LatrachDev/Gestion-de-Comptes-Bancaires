@@ -31,8 +31,6 @@
                     foreach ($transactions as $accountTransactions) {
                         $allTransactions = array_merge($allTransactions, $accountTransactions);
                     }
-                    
-                    // Sort transactions by date, newest first
                     usort($allTransactions, function($a, $b) {
                         return strtotime($b['created_at']) - strtotime($a['created_at']);
                     });
@@ -51,7 +49,6 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <?php foreach ($allTransactions as $transaction): ?>
-                                    <?php if($transaction['account_id'] === $client->getId()) : ?>
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <?= date('M j, Y H:i', strtotime($transaction['created_at'])) ?>
@@ -109,7 +106,6 @@
                                             <?php endif; ?>
                                         </td>
                                     </tr>
-                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -118,7 +114,7 @@
                     <?php endif; ?>
                 </div>
             </div>
-            
+
     <script>
         // Toggle sidebar visibility on mobile
         const toggleButton = document.getElementById('toggleSidebar');

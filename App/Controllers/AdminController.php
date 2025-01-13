@@ -12,7 +12,6 @@ use Helpers\Database;
 class AdminController extends BaseController
 {
     private $db;
-    private $account;
 
     public function __construct()
     {
@@ -20,12 +19,21 @@ class AdminController extends BaseController
         Auth::requireAdmin();
         $this->db = new Database();
         $this->db->connect();
-        $this->account = new Account($this->db);
     }
 
     public function index(): void
     {
-        $this->render('admin/index');
+        $totalClients = User::count($this->db);
+        $totalAccounts = Account::count($this->db);
+        $totalBalance = Account::getTotals($this->db);
+        $totalTransactions = Transaction::count($this->db);
+        $data = [
+            'totalClients' => $totalClients,
+            'totalAccounts' => $totalAccounts,
+            'totalBalance' => $totalBalance,
+            'totalTransactions' => $totalTransactions
+        ];
+        $this->render('admin/index', $data);
     }
 
     public function showCreateClient()
@@ -112,7 +120,7 @@ class AdminController extends BaseController
         }
 
         $accounts = Account::loadByUserId($this->db, $id);
-        
+
         // Get transactions for each account
         $transactions = [];
         foreach ($accounts as $account) {
@@ -143,7 +151,7 @@ class AdminController extends BaseController
             exit;
         }
 
-        $existingAccountTypes = array_map(function($account) {
+        $existingAccountTypes = array_map(function ($account) {
             return $account->getAccountType();
         }, $accounts);
 
@@ -174,8 +182,8 @@ class AdminController extends BaseController
 
     public function suspendAccount($clientId, $accountId)
     {
-        $account = new Account($this->db);
-        if ($account->loadById($accountId)) {
+        $account = Account::loadById($this->db, $accountId);
+        if ($account) {
             if ($account->suspend()) {
                 $this->setFlash('admin_show_client', 'Account suspended successfully', 'success');
             } else {
@@ -190,8 +198,7 @@ class AdminController extends BaseController
 
     public function activateAccount($clientId, $accountId)
     {
-        $account = new Account($this->db);
-        if ($account->loadById($accountId)) {
+        if ($account = Account::loadById($this->db, $accountId)) {
             if ($account->activate()) {
                 $this->setFlash('admin_show_client', 'Account activated successfully', 'success');
             } else {
@@ -214,7 +221,6 @@ class AdminController extends BaseController
         }
 
         if ($client->suspend()) {
-            // Also suspend all client's accounts
             $accounts = Account::loadByUserId($this->db, $clientId);
             foreach ($accounts as $account) {
                 $account->suspend();
@@ -238,7 +244,6 @@ class AdminController extends BaseController
         }
 
         if ($client->activate()) {
-            // Also activate all client's accounts
             $accounts = Account::loadByUserId($this->db, $clientId);
             foreach ($accounts as $account) {
                 $account->activate();
@@ -250,5 +255,70 @@ class AdminController extends BaseController
 
         header("Location: /admin/clients/{$clientId}");
         exit;
+    }
+    //ajax
+    public function searchTransactions()
+    {
+        try {
+            $transactions = empty($_GET) ? 
+                Transaction::getAllHistory($this->db) : 
+                Transaction::getAllHistoryByFilters($this->db, $_GET);
+
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'success',
+                'data' => $transactions
+            ]);
+        } catch (\Exception $e) {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to fetch transactions'
+            ]);
+        }
+        exit;
+    }
+
+    public function getFinancialReport()
+    {
+        $report = [
+            'total_deposits' => $this->db->fetch(
+                "SELECT SUM(amount) as total FROM transactions WHERE transaction_type = 'deposit'"
+            )['total'] ?? 0,
+            
+            'total_withdrawals' => $this->db->fetch(
+                "SELECT SUM(amount) as total FROM transactions WHERE transaction_type = 'withdrawal'"
+            )['total'] ?? 0,
+            
+            'total_transfers' => $this->db->fetch(
+                "SELECT SUM(amount) as total FROM transactions WHERE transaction_type = 'transfer'"
+            )['total'] ?? 0,
+            
+            'accounts_summary' => $this->db->fetchAll(
+                "SELECT account_type, COUNT(*) as count, SUM(balance) as total_balance 
+                FROM accounts 
+                GROUP BY account_type"
+            ),
+            
+            // Get all transactions instead of just recent ones
+            'transactions' => $this->db->fetchAll(
+                "SELECT t.*, 
+                        u.name as client_name, 
+                        a.account_type,
+                        CASE 
+                            WHEN t.transaction_type = 'transfer' AND t.beneficiary_account_id IS NOT NULL 
+                            THEN (SELECT name FROM users WHERE id = (SELECT user_id FROM accounts WHERE id = t.beneficiary_account_id))
+                            ELSE NULL 
+                        END as beneficiary_name
+                FROM transactions t 
+                JOIN accounts a ON t.account_id = a.id 
+                JOIN users u ON a.user_id = u.id 
+                ORDER BY t.created_at DESC"
+            ),
+            'generated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->render('admin/reports/financial', $report);
     }
 }

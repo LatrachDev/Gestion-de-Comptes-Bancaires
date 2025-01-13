@@ -49,7 +49,7 @@
             <div class="bg-white rounded-lg shadow-sm">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">  
+                        <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
@@ -81,13 +81,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">
+                                                    <div class="name-client text-sm font-medium text-gray-900">
                                                         <?= htmlspecialchars($client->getName()) ?>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="email-client px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <?= htmlspecialchars($client->getEmail()) ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
@@ -95,16 +95,11 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex justify-end space-x-3">
-                                                <a href="/admin/clients/<?= $client->getId() ?>" 
+                                                <a href="/admin/clients/<?= $client->getId() ?>"
                                                    class="text-blue-600 hover:text-blue-900 flex items-center">
                                                     <i class="fas fa-eye mr-1"></i>
                                                     View Details
                                                 </a>
-                                                <button onclick="confirmDelete(<?= $client->getId() ?>)" 
-                                                        class="text-red-600 hover:text-red-900 flex items-center">
-                                                    <i class="fas fa-trash-alt mr-1"></i>
-                                                    Delete
-                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -118,14 +113,13 @@
     </div>
 
     <script>
-        // Live search functionality
         document.getElementById('searchClient').addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
             const rows = document.querySelectorAll('tbody tr');
 
             rows.forEach(row => {
-                const name = row.querySelector('.text-gray-900')?.textContent.toLowerCase() || '';
-                const email = row.querySelector('.text-gray-500')?.textContent.toLowerCase() || '';
+                const name = row.querySelector('.name-client').textContent.toLowerCase();
+                const email = row.querySelector('.email-client').textContent.toLowerCase();
 
                 if (name.includes(searchTerm) || email.includes(searchTerm)) {
                     row.style.display = '';
@@ -134,27 +128,6 @@
                 }
             });
         });
-
-        // Delete client functionality
-        function deleteClient(clientId) {
-            if (confirm('Are you sure you want to delete this client?')) {
-                fetch(`/admin/clients/${clientId}/remove`, {
-                    method: 'POST'
-                }).then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        alert('Failed to delete client');
-                    }
-                });
-            }
-        }
-
-        function confirmDelete(clientId) {
-            if (confirm('Are you sure you want to delete this client? This will also delete all associated accounts and transactions.')) {
-                window.location.href = `/admin/clients/${clientId}/remove`;
-            }
-        }
     </script>
 </body>
 

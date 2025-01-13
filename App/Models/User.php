@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Helpers\Database;
-use LDAP\Result;
 
 class User
 {
@@ -23,7 +22,6 @@ class User
         $this->db = $db;
     }
 
-    // load all clients
     public static function loadAllClients(Database $db)
     {
         $sql = "SELECT * FROM users WHERE role = 'client'";
@@ -231,6 +229,13 @@ class User
     public function setProfilePic($profilePic)
     {
         $this->profilePic = $profilePic;
+    }
+
+    public static function clientsCount(Database $db)
+    {
+        $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'client'";
+        $data = $db->fetch($sql);
+        return $data['total'];
     }
 
     public function save()

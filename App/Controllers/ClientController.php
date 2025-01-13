@@ -46,15 +46,11 @@ class ClientController extends BaseController
             $accounts = Account::loadByUserId($this->db, $user->getId());
             $this->render('client/transfer', ['accounts' => $accounts]);
         } elseif($_SERVER['REQUEST_METHOD'] === 'POST'){
-                $account = new Account($this->db);
-                if (!$account->loadById($_POST['sender'])) {
-                    echo "false";
-                }
                 $recipient = $_POST['recipient'];
-   
+                $sender = $_POST['sender'];
+
                 $amount = $_POST['amount'];
-                $motif = $_POST['motif'];
-                if($account->transfer($amount, $_POST['recipient'])){
+                if(Account::transferFromTo($this->db,$sender, $recipient, $amount)){
                     $this->setFlash('transfer', 'Transfer Completed');
                     header('Location: /transfer');
                     exit;
@@ -64,7 +60,7 @@ class ClientController extends BaseController
                     exit;
                 }
 
-            
+
         }
     }
 
@@ -117,8 +113,8 @@ class ClientController extends BaseController
 
     public function fundAccount()
     {
-        $account = new Account($this->db);
-        if (!$account->loadById($_POST['account_id'])) {
+        $account = Account::loadById($this->db, $_POST['account_id']);
+        if (!$account) {
             $this->setFlash('compte', 'Account not found', 'error');
             header('Location: /compte');
             exit;
@@ -142,14 +138,14 @@ class ClientController extends BaseController
 
     public function withdraw()
     {
-        $account = new Account($this->db);
+        $account = Account::loadById($this->db, $_POST['account_id']);
 
-        if (!$account->loadById($_POST['account_id'])) {
+        if (!$account) {
             $this->setFlash('compte', 'Account not found', 'error');
             header('Location: /compte');
             exit;
         }
-        
+
         if ($account->getAccountType() == 'savings') {
             $this->setFlash('compte', 'cant  withdraw fom savings', 'error');
             header('Location: /compte');
@@ -171,7 +167,7 @@ class ClientController extends BaseController
         }
 
         if ($success === 10) {
-            $this->setFlash('compte', 'sir ta tjm3 lflos w aji', 'error'); 
+            $this->setFlash('compte', 'sir ta tjm3 lflos w aji', 'error');
             header('Location: /compte');
             exit;
         }
@@ -191,13 +187,12 @@ class ClientController extends BaseController
         }
 
         $accounts = Account::loadByUserId($this->db, $user->getId());
-        
+
         $transactions = [];
         foreach ($accounts as $account) {
             $transaction = new Transaction($this->db);
             $transactions[$account->getId()] = $transaction->getHistory($account->getId());
         }
-
         return $this->render('client/history', [
             'client' => $user,
             'accounts' => $accounts,

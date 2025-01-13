@@ -47,6 +47,8 @@ Route::post('/admin/clients/{id}/activate', [Admin::class, 'activateClient']);
 
 Route::get('/admin/reports', [Admin::class, 'getFinancialReport']);
 
+// Add this route with the other admin routes
+Route::get('/admin/transactions/search', [Admin::class, 'searchTransactions']);
 
 // Client Routes
 

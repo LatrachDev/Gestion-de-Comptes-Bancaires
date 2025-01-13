@@ -30,6 +30,21 @@ class Account
         return $data ? true : false;
     }
 
+    public static function count(Database $db)
+    {
+        $sql = "SELECT COUNT(*) as count FROM accounts";
+        $data = $db->fetch($sql);
+        return $data['count'];
+    }
+
+
+    public static function getTotals(Database $db)
+    {
+        $sql = "SELECT SUM(balance) as total FROM accounts";
+        $data = $db->fetch($sql);
+        return $data['total'];
+    }
+
     public static function create(Database $db, $userId, $accountType, $balance = 0.00)
     {
         if (!in_array($accountType, ['savings', 'current'])) {
@@ -37,73 +52,96 @@ class Account
         }
         $sql = "INSERT INTO accounts (user_id, account_type, balance, status) VALUES (?, ?, ?, 'active')";
         if ($db->query($sql, [$userId, $accountType, $balance])) {
-            $account = new self($db);
-            $account->loadById($db->lastInsertId());
+            $id = $db->lastInsertId();
+            $account = self::loadById($db, $id);
             return $account;
         }
         return false;
     }
 
-    public function loadById($id)
+    public static function loadById(Database $db, $id)
     {
         $sql = "SELECT * FROM accounts WHERE id = ?";
-        $data = $this->db->fetch($sql, [$id]);
+        $data = $db->fetch($sql, [$id]);
         if ($data) {
-            $this->hydrate($data);
-            return $this;
+            $account = new self($db);
+            $account->hydrate($data);
+            return $account;
         }
         return false;
     }
 
-    public function deposit($amount)
+    public function deposit($amount, $addTransaction = true)
     {
         if ($amount <= 0) return false;
 
         if ($this->updateBalance($this->balance + $amount)) {
-            $this->transactionModel->create($this->id, 'deposit', $amount);
-            return $this;
+            if ($addTransaction) {
+                $transaction = Transaction::create($this->db, $this->id, 'deposit', $amount);
+                return $transaction;
+            }
+            return true;
         }
         return false;
     }
 
-    public function withdraw($amount)
+    public function withdraw($amount, $addTransaction = true)
     {
-        if ($amount <= 0 || $amount > $this->balance) return 10;
+        if ($amount <= 0 || $amount > $this->balance) {
+            return 10;
+        }
 
         if ($this->updateBalance($this->balance - $amount)) {
-            $this->transactionModel->create($this->id, 'withdrawal', $amount);
-            return $this;
+            if ($addTransaction) {
+                $transaction = Transaction::create($this->db, $this->id, 'withdrawal', $amount);
+                return $transaction;
+            }
+            return true;
         }
         return false;
     }
 
-    public function transfer($amount, $toAccountId)
+    public static function transferFromTo(Database $db, $fromAccountId, $toAccountId, $amount)
     {
-        $targetAccount = Account::loadAccountById($this->db, $toAccountId);
-        // var_dump(Account::validateTransferById($amount, $targetAccount['user_id'], $this->balance, $this->userId));
-        // var_dump($targetAccount['balance']);
-        // die();
-        if (!$targetAccount || !Account::validateTransferById($amount, $targetAccount['user_id'], $this->balance, $this->userId)) {
+        $fromAccount = self::loadById($db, $fromAccountId);
+        $toAccount = self::loadById($db, $toAccountId);
+
+        if (!$fromAccount || !$toAccount) {
             return false;
         }
 
-        if ($this->updateBalance($this->balance - $amount)) {
-            if (Account::updateBalanceById($targetAccount['id'], ($targetAccount['balance'] + $amount), $this->db)) {
-                $this->transactionModel->create($this->id, 'transfer', $amount);
-                return $this;
-            }
-            $this->updateBalance($this->balance + $amount);
+        if (!$fromAccount->withdraw($amount, false)) {
+            return false;
         }
-        return false;
+
+        if (!$toAccount->deposit($amount, false)) {
+            return false;
+        }
+
+        $transaction = Transaction::create($db, $fromAccountId, 'transfer', $amount, $toAccountId);
+        return $transaction;
+    }
+    public function transfer($amount, $toAccountId)
+    {
+        $fromAccount = $this;
+        $toAccount = Account::loadById($this->db, $toAccountId);
+
+        if (!$toAccount) {
+            return false;
+        }
+
+        if (!$fromAccount->withdraw($amount, false)) {
+            return false;
+        }
+
+        if (!$toAccount->deposit($amount, false)) {
+            return false;
+        }
+
+        $transaction = Transaction::create($this->db, $fromAccount->getId(), 'transfer', $amount, $toAccountId);
+        return $transaction;
     }
 
-    private function validateTransfer($amount, $targetAccount)
-    {
-        return $amount > 0 &&
-            $amount <= $this->balance &&
-            $targetAccount &&
-            $targetAccount->getUserId() === $this->userId;
-    }
 
     private function updateBalance($newBalance)
     {
@@ -206,7 +244,8 @@ class Account
         $this->balance = $balance;
     }
 
-    public static function loadAccountById(Database $db, $id){
+    public static function loadAccountById(Database $db, $id)
+    {
         $sql = "SELECT * FROM accounts WHERE id = ?";
         $data = $db->fetch($sql, [$id]);
         return $data;
@@ -226,5 +265,4 @@ class Account
         }
         return false;
     }
-
 }

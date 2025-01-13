@@ -50,7 +50,6 @@
                 </div>
             <?php endif; ?>
 
-            <!-- Client Information Card -->
             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -74,7 +73,6 @@
                 </div>
             </div>
 
-            <!-- Bank Accounts Section -->
             <div class="mb-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold text-gray-800">Bank Accounts</h2>
@@ -136,7 +134,6 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Add Account Modal -->
             <div id="addAccountModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
                 <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                     <div class="mt-3">
@@ -173,7 +170,6 @@
                 </div>
             </div>
 
-            <!-- Recent Transactions -->
             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                 <h2 class="text-lg font-semibold text-gray-800 mb-4">Recent Transactions</h2>
                 <div class="overflow-x-auto">
@@ -182,8 +178,7 @@
                     foreach ($transactions as $accountTransactions) {
                         $allTransactions = array_merge($allTransactions, $accountTransactions);
                     }
-                    
-                    // Sort transactions by date, newest first
+
                     usort($allTransactions, function($a, $b) {
                         return strtotime($b['created_at']) - strtotime($a['created_at']);
                     });
@@ -267,7 +262,7 @@
                     <?php endif; ?>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <script>
